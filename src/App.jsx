@@ -18,6 +18,7 @@ function App() {
         setLoading(false);
       });
   }, []);
+  
   let list = '📃'
   let stars = '✨⭐🌟'
  
