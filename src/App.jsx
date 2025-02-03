@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -7,39 +6,46 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://dummyjson.com/quotes/')
-      .then(response => response.json())
-      .then(data => {
-        setQuotes(data.quotes);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error Fetching Data', error);
-        setLoading(false);
-      });
+    const timer = setTimeout(() => {
+      fetch('https://dummyjson.com/quotes/')
+        .then(response => response.json())
+        .then(data => {
+          setQuotes(data.quotes);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error Fetching Data', error);
+          setLoading(false);
+        });
+    }, 2000); // 10 seconds delay
+
+    return () => clearTimeout(timer); // Cleanup the timer on component unmount
   }, []);
-  
-  let list = '📃'
-  let stars = '✨⭐🌟'
- 
+
+  let list = '📃';
+  let stars = '✨⭐🌟';
+
   return (
     <div className='App'>
-    <h1>{list} Quotes List {stars}</h1>
+      <h1>{list} Quotes List {stars}</h1>
 
-    {loading ? (
-      <p>Loading...</p>
-    ) : (
-      <div className='quotes-container'>
-        {quotes.map(quote => (
-          <div key={quote.id} className="quote-card">
-            <p className="quote-text">"{quote.quote}"</p>
-            <p className="quote-author">- {quote.author}</p>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-  )
+      {loading ? (
+        <div>
+          <div className="loading-spinner"></div>
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div className='quotes-container'>
+          {quotes.map(quote => (
+            <div key={quote.id} className="quote-card">
+              <p className="quote-text">"{quote.quote}"</p>
+              <p className="quote-author">- {quote.author}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
